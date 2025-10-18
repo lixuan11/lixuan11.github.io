@@ -1,7 +1,51 @@
+# OS generated files
 .DS_Store
 Thumbs.db
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Hexo generated files
 db.json
 *.log
-node_modules/
 public/
 .deploy*/
+.deploy_git/
+archives/
+css/
+js/
+fancybox/
+index.html
+
+# Dependencies
+node_modules/
+
+# Editor directories and files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swo
+*~
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# OS generated files 2
+$RECYCLE.BIN/
+ehthumbs.db
+Thumbs.db
