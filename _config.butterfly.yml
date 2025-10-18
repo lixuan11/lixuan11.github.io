@@ -36,6 +36,17 @@ social:
   Github: https://github.com/lixuan11
   # 可以添加更多社交链接
 
+# 作者卡片按钮
+aside:
+  card_author:
+    enable: true
+    description:
+    button:
+      enable: true
+      icon: fab fa-github
+      text: Follow Me
+      link: https://github.com/lixuan11
+
 # 数学公式
 mathjax:
   enable: false
