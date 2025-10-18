@@ -1,58 +1,42 @@
-name: Build & Deploy Hexo
-
+name: Build & Deploy Hexo (Butterfly)
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-
+    branches: [ main ]
 permissions:
   contents: write
-
+  pages: write
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
         with:
+          submodules: true
           fetch-depth: 0
-
-      - name: Use Node.js 18
+      - name: Ensure butterfly theme
+        run: |
+          if [ ! -d "themes/butterfly" ]; then
+            git clone https://github.com/jerryc127/hexo-theme-butterfly.git themes/butterfly
+            rm -rf themes/butterfly/.git
+          fi
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-
-      - name: Cache npm
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Install dependencies
+      - name: Install deps
+        run: npm ci
+      - name: Install theme deps
+        if: ${{ -f 'themes/butterfly/package.json' }}
         run: |
+          cd themes/butterfly
           npm ci
-
-      - name: Generate site (Hexo)
-        run: |
-          # 如果你需要生成draft，可加 -D
-          npx hexo generate
-
-      - name: Add CNAME (optional)
-        if: ${{ env.CUSTOM_DOMAIN != '' }}
-        run: |
-          echo "${{ env.CUSTOM_DOMAIN }}" > ./public/CNAME
-        env:
-          CUSTOM_DOMAIN: ${{ secrets.CUSTOM_DOMAIN || '' }}
-
-      - name: Deploy to gh-pages
+          cd -
+      - name: Generate
+        run: npx hexo generate
+      - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
-          publish_dir: ./public
           publish_branch: gh-pages
+          publish_dir: ./public
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          allow_empty_commit: false
