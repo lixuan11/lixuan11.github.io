@@ -22,8 +22,13 @@ jobs:
     - name: Install Dependencies
       run: npm install
     
+    - name: Check Theme Directory
+      run: ls -la themes/
+    
     - name: Build Hexo Site
       run: npm run build
+      env:
+        HEXO_NODE_MODULES_HEXO_THEME_BUTTERFLY: themes/butterfly
     
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
