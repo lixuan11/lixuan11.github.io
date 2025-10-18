@@ -27,8 +27,8 @@ jobs:
     
     - name: Build Hexo Site
       run: |
-        hexo clean
-        hexo generate
+        npx hexo clean
+        npx hexo generate
       env:
         HEXO_THEME: butterfly
     
