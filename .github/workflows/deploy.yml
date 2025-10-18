@@ -23,6 +23,18 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Ensure Theme Installation
+        run: |
+          echo "Reinstalling landscape theme to ensure all files are present..."
+          rm -rf themes/landscape
+          mkdir -p themes/landscape
+          npm install hexo-theme-landscape --save
+          cp -r node_modules/hexo-theme-landscape/* themes/landscape/
+          echo "Verifying theme files after installation:"
+          ls -la themes/landscape/
+          ls -la themes/landscape/languages/
+          ls -la themes/landscape/layout/
+
       - name: Debug Info
         run: |
           echo "Node.js version: $(node -v)"
