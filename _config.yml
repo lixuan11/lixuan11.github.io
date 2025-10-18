@@ -10,7 +10,7 @@ keywords: 博客,Hexo,技术分享
 author: lixuan11
 language: zh-CN
 timezone: Asia/Shanghai
-# favicon在theme_config中设置
+favicon: /img/favicon.ico
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
