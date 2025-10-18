@@ -74,4 +74,4 @@ jobs:
       uses: actions/deploy-pages@v2
       with:
         # 使用我们构建的gh-pages分支
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
