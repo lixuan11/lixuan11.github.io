@@ -62,8 +62,28 @@ jobs:
           echo "Config file:"
           cat _config.yml
 
-      - name: Generate Static Files
-        run: npm run build  # 确保 package.json 中有 build 脚本指向 hexo generate
+      - name: Generate Static Files with Debug
+        run: |
+          echo "Running hexo clean first..."
+          npx hexo clean
+          echo "Current working directory: $(pwd)"
+          echo "Checking theme configuration in _config.yml..."
+          grep -A 5 "theme" _config.yml
+          echo "Running hexo generate with verbose output..."
+          # 使用set -x显示执行的命令，set -e确保错误时退出，set -o pipefail捕获管道错误
+          set -x -e -o pipefail
+          # 直接运行hexo generate而不是通过npm，以便更好地捕获错误
+          npx hexo generate || {
+            echo "\n❌ Hexo generate failed! Detailed error:"
+            # 检查是否有特定的错误日志
+            if [ -f "debug.log" ]; then
+              cat debug.log
+            fi
+            # 尝试用不同的方式运行来获取更多信息
+            echo "\nTrying alternative approach with --debug flag:"
+            NODE_ENV=development npx hexo generate --debug || true
+            exit 1
+          }
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
