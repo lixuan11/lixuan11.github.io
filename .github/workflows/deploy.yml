@@ -1,93 +1,72 @@
-name: Deploy Hexo Blog
+name: Build & Deploy Hexo (Butterfly)
 
 on:
   push:
     branches:
-      - main  # 或者是你的主分支名称，如 master
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write   # 允许 actions-gh-pages 推送 gh-pages
+  pages: write
+  id-token: write
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
+          submodules: true       # 如果你用 submodule 管理 theme，启用它
           fetch-depth: 0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Use Node.js 18
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'  # 或其他你使用的 Node.js 版本
-          cache: 'npm'
+          node-version: '18'
 
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Butterfly Theme Installation
-        run: |
-          echo "Setting up Butterfly theme with direct file copy..."
-          # 确保themes目录存在
-          mkdir -p themes
-          # 直接从npm安装并复制主题文件，避免软链接问题
-          npm install hexo-theme-butterfly --save
-          # 确保主题目录结构完整
-          rm -rf themes/butterfly
-          mkdir -p themes/butterfly
-          # 复制所有必要的主题文件
-          cp -r node_modules/hexo-theme-butterfly/* themes/butterfly/
-          echo "Verifying Butterfly theme files:"
-          ls -la themes/
-          ls -la themes/butterfly/
-          # 确保layout目录存在，这是Hexo寻找主题的关键
-          if [ -d "themes/butterfly/layout" ]; then
-            echo "✓ Butterfly theme layout directory found!"
-            ls -la themes/butterfly/layout/
-          else
-            echo "✗ Butterfly theme layout directory not found!"
-          fi
-          # 安装额外的必要依赖
-          npm install hexo-renderer-pug hexo-renderer-stylus --save
-
-      - name: Debug Info
-        run: |
-          echo "Node.js version: $(node -v)"
-          echo "npm version: $(npm -v)"
-          echo "Hexo version: $(npx hexo -v)"
-          echo "Theme directory contents:"
-          ls -la themes/
-          echo "Butterfly theme directory contents:"
-          ls -la themes/butterfly/
-          echo "Package contents:"
-          cat package.json
-          echo "Config file:"
-          cat _config.yml
-
-      - name: Generate Static Files with Debug
-        run: |
-          echo "Running hexo clean first..."
-          npx hexo clean
-          echo "Current working directory: $(pwd)"
-          echo "Checking theme configuration in _config.yml..."
-          grep -A 5 "theme" _config.yml
-          echo "Running hexo generate with verbose output..."
-          # 使用set -x显示执行的命令，set -e确保错误时退出，set -o pipefail捕获管道错误
-          set -x -e -o pipefail
-          # 直接运行hexo generate而不是通过npm，以便更好地捕获错误
-          npx hexo generate || {
-            echo "\n❌ Hexo generate failed! Detailed error:"
-            # 检查是否有特定的错误日志
-            if [ -f "debug.log" ]; then
-              cat debug.log
-            fi
-            # 尝试用不同的方式运行来获取更多信息
-            echo "\nTrying alternative approach with --debug flag:"
-            NODE_ENV=development npx hexo generate --debug || true
-            exit 1
-          }
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Cache npm
+        uses: actions/cache@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # 缓存 node_modules 或 npm 缓存，加速依赖安装
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: |
+          npm ci
+
+      - name: Ensure theme dependencies (Butterfly)
+        working-directory: themes/butterfly
+        if: ${{ always() && (exists('themes/butterfly/package.json')) }}
+        run: |
+          # 若主题有自己的依赖，安装它们
+          npm ci
+
+      - name: Generate site (Hexo)
+        run: |
+          # 如果你需要生成draft，可加 -D
+          npx hexo generate
+
+      - name: Add CNAME (optional)
+        if: ${{ env.CUSTOM_DOMAIN != '' }}
+        run: |
+          echo "${{ env.CUSTOM_DOMAIN }}" > ./public/CNAME
+        env:
+          CUSTOM_DOMAIN: ${{ secrets.CUSTOM_DOMAIN || '' }}
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
           publish_dir: ./public
-          publish_branch: gh-pages  # 部署到 gh-pages 分支
+          publish_branch: gh-pages
+          # 使用内置 GITHUB_TOKEN 部署到同一仓库
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # 若你使用 deploy_key 私钥，可以替换为 deploy_key: ${{ secrets.DEPLOY_KEY }}
+          # cname: true   # 若 want actions to keep existing CNAME, 可配置
+          allow_empty_commit: false
