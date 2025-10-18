@@ -46,7 +46,7 @@ jobs:
         if: ${{ always() && (exists('themes/butterfly/package.json')) }}
         run: |
           # 若主题有自己的依赖，安装它们
-          npm ci
+          npm install
 
       - name: Generate site (Hexo)
         run: |
