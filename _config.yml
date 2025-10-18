@@ -105,3 +105,4 @@ deploy:
   type: git
   repo: https://github.com/lixuan11/lixuan11.github.io.git
   branch: gh-pages
+  ignore_hidden: false
