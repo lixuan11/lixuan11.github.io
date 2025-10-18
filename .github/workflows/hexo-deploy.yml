@@ -38,6 +38,10 @@ jobs:
         HEXO_NODE_MODULES_HEXO_THEME_BUTTERFLY: themes/butterfly
         HEXO_THEME: butterfly
     
+    # 确保.nojekyll文件存在于构建输出目录
+    - name: Create .nojekyll file in public directory
+      run: touch public/.nojekyll
+    
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
@@ -45,3 +49,5 @@ jobs:
         publish_dir: ./public
         publish_branch: gh-pages
         force_orphan: true
+        # 显式禁用GitHub Pages的自动构建
+        keep_files: false
