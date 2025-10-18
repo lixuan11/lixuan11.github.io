@@ -25,14 +25,28 @@ jobs:
 
       - name: Butterfly Theme Installation
         run: |
-          echo "Setting up Butterfly theme..."
+          echo "Setting up Butterfly theme with direct file copy..."
+          # 确保themes目录存在
+          mkdir -p themes
+          # 直接从npm安装并复制主题文件，避免软链接问题
+          npm install hexo-theme-butterfly --save
+          # 确保主题目录结构完整
+          rm -rf themes/butterfly
           mkdir -p themes/butterfly
-          # 创建主题软链接或复制必要文件
-          if [ ! -d "themes/butterfly/layout" ]; then
-            ln -s ../node_modules/hexo-theme-butterfly themes/butterfly
-          fi
-          echo "Verifying Butterfly theme setup:"
+          # 复制所有必要的主题文件
+          cp -r node_modules/hexo-theme-butterfly/* themes/butterfly/
+          echo "Verifying Butterfly theme files:"
+          ls -la themes/
           ls -la themes/butterfly/
+          # 确保layout目录存在，这是Hexo寻找主题的关键
+          if [ -d "themes/butterfly/layout" ]; then
+            echo "✓ Butterfly theme layout directory found!"
+            ls -la themes/butterfly/layout/
+          else
+            echo "✗ Butterfly theme layout directory not found!"
+          fi
+          # 安装额外的必要依赖
+          npm install hexo-renderer-pug hexo-renderer-stylus --save
 
       - name: Debug Info
         run: |
