@@ -1,0 +1,81 @@
+# Butterfly配置文件
+# 详细配置文档：https://butterfly.js.org/docs/zh/config-guide/
+
+# 菜单配置
+menu:
+  首页: /
+  归档: /archives/
+  分类: /categories/
+  标签: /tags/
+  关于: /about/
+
+# 网站图标
+site_favicon: /img/favicon.ico
+
+# 网站Logo
+favicon:
+  icon: /img/favicon.ico
+  icon_192: /img/favicon.ico
+  apple_touch_icon: /img/favicon.ico
+
+# 网站背景
+# background_image:
+#   enable: true
+#   url:
+#     - https://example.com/background.jpg
+
+# 代码高亮
+highlight:
+  enable: true
+  line_number: true
+  auto_detect: true
+  tab_replace: '    '
+
+# 社交链接
+social:
+  Github: https://github.com/lixuan11
+  # 可以添加更多社交链接
+
+# 数学公式
+mathjax:
+  enable: false
+
+# 搜索
+local_search:
+  enable: true
+
+# 评论系统（可根据需要启用）
+# gitalk:
+#   enable: true
+#   github_id: username
+#   repo: repo-name
+#   client_id: client-id
+#   client_secret: client-secret
+
+# 页脚信息
+footer:
+  owner:
+    enable: true
+    since: 2024
+  custom_text: 'Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & <a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank">Butterfly</a>'
+
+# 回到顶部按钮
+back2top:
+  enable: true
+  icon: fas fa-arrow-up
+  # 是否在移动设备上显示
+  mobile: true
+
+# 版权信息
+creative_commons:
+  license: by-nc-sa
+  sidebar: false
+  post: false
+
+# 页面加载进度条
+reading_progress:
+  enable: true
+  height: 3px
+  color: '#ff7e79'
+  # 从顶部开始计算进度
+  position: top

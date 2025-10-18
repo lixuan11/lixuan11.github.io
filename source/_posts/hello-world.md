@@ -1,7 +1,21 @@
 ---
 title: Hello World
+date: 2024-10-18
+tags:
+  - 欢迎
+  - Hexo
+categories:
+  - 博客
+description: 这是我的第一篇博客文章，使用Hexo和Butterfly主题搭建。
+cover: /img/cover.jpg
 ---
-Welcome to [Hexo](https://hexo.io/)! This is your very first post. Check [documentation](https://hexo.io/docs/) for more info. If you get any problems when using Hexo, you can find the answer in [troubleshooting](https://hexo.io/docs/troubleshooting.html) or you can ask me on [GitHub](https://github.com/hexojs/hexo/issues).
+# 欢迎来到我的Hexo博客
+
+你好，这是我的第一篇博客文章！我正在使用[Hexo](https://hexo.io/)静态博客生成器和[Butterfly](https://github.com/jerryc127/hexo-theme-butterfly)主题来搭建这个个人博客。
+
+## 关于这个博客
+
+这个博客将主要用于分享我的技术学习心得、项目经验和生活感悟。通过GitHub Actions实现自动部署，确保内容能够及时发布。
 
 ## Quick Start
 
