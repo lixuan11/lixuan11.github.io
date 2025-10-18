@@ -10,21 +10,16 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
         submodules: true
     
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
-        node-version: '16'
+        node-version: '18'
         cache: 'npm'
     
     - name: Install Dependencies
@@ -69,9 +64,4 @@ jobs:
         # 确保.nojekyll文件被保留
         allow_empty_commit: true
     
-    - name: Deploy to GitHub Pages (official)
-      id: deployment
-      uses: actions/deploy-pages@v2
-      with:
-        # 使用我们构建的gh-pages分支
-        token: ${{ secrets.GITHUB_TOKEN }}
+    # 部署已完成，使用peaceiris/actions-gh-pages@v3直接推送到gh-pages分支
