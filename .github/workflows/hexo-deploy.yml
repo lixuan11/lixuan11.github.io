@@ -10,6 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
     - uses: actions/checkout@v3
       with:
@@ -45,6 +50,14 @@ jobs:
         touch public/.nojekyll
         ls -la public/ | grep .nojekyll
     
+    # 复制根目录的.nojekyll文件到public目录
+    - name: Copy root .nojekyll to public
+      run: |
+        if [ -f .nojekyll ]; then
+          cp .nojekyll public/
+          echo "Copied root .nojekyll to public directory"
+        fi
+    
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
@@ -52,5 +65,13 @@ jobs:
         publish_dir: ./public
         publish_branch: gh-pages
         force_orphan: true
-        # 显式禁用GitHub Pages的自动构建
         keep_files: false
+        # 确保.nojekyll文件被保留
+        allow_empty_commit: true
+    
+    - name: Deploy to GitHub Pages (official)
+      id: deployment
+      uses: actions/deploy-pages@v2
+      with:
+        # 使用我们构建的gh-pages分支
+        github_token: ${{ secrets.GITHUB_TOKEN }}
