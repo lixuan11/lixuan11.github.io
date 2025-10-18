@@ -9,8 +9,29 @@ menu:
   标签: /tags/
   关于: /about/
 
+# 页面生成配置
+index_generator:
+  path: ''
+  per_page: 10
+  order_by: -date
+
+archive_generator:
+  per_page: 10
+  yearly: true
+  monthly: true
+  daily: false
+  order_by: -date
+
+category_generator:
+  per_page: 10
+  order_by: -date
+
+tag_generator:
+  per_page: 10
+  order_by: -date
+
 # 网站图标
-site_favicon: /img/favicon.ico
+site_favicon: img/favicon.ico
 
 # 网站Logo
 favicon:
