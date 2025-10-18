@@ -123,9 +123,5 @@ deploy:
   repo: https://github.com/lixuan11/lixuan11.github.io.git
   branch: gh-pages
 
-# 主题配置
-theme_config:
-  favicon:
-    icon: img/favicon.ico
-    icon_192: img/favicon.ico
-    apple_touch_icon: img/favicon.ico
+# 网站图标 - 使用简单的字符串格式
+favicon: img/favicon.ico
