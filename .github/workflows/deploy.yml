@@ -23,17 +23,16 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Ensure Theme Installation
+      - name: Butterfly Theme Installation
         run: |
-          echo "Reinstalling landscape theme to ensure all files are present..."
-          rm -rf themes/landscape
-          mkdir -p themes/landscape
-          npm install hexo-theme-landscape --save
-          cp -r node_modules/hexo-theme-landscape/* themes/landscape/
-          echo "Verifying theme files after installation:"
-          ls -la themes/landscape/
-          ls -la themes/landscape/languages/
-          ls -la themes/landscape/layout/
+          echo "Setting up Butterfly theme..."
+          mkdir -p themes/butterfly
+          # 创建主题软链接或复制必要文件
+          if [ ! -d "themes/butterfly/layout" ]; then
+            ln -s ../node_modules/hexo-theme-butterfly themes/butterfly
+          fi
+          echo "Verifying Butterfly theme setup:"
+          ls -la themes/butterfly/
 
       - name: Debug Info
         run: |
@@ -42,8 +41,8 @@ jobs:
           echo "Hexo version: $(npx hexo -v)"
           echo "Theme directory contents:"
           ls -la themes/
-          echo "Landscape theme directory contents:"
-          ls -la themes/landscape/
+          echo "Butterfly theme directory contents:"
+          ls -la themes/butterfly/
           echo "Package contents:"
           cat package.json
           echo "Config file:"
