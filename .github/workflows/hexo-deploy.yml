@@ -25,33 +25,15 @@ jobs:
     - name: Install Dependencies
       run: npm install
     
-    - name: Check Theme Directory
-      run: |
-        ls -la themes/
-        ls -la themes/butterfly/ | head -10
-    
     - name: Build Hexo Site
       run: |
-        npm run clean
-        npm run build
+        hexo clean
+        hexo generate
       env:
-        HEXO_NODE_MODULES_HEXO_THEME_BUTTERFLY: themes/butterfly
         HEXO_THEME: butterfly
     
-    # 确保.nojekyll文件存在于构建输出目录
-    - name: Create .nojekyll file in public directory
-      run: |
-        echo "Creating .nojekyll file"
-        touch public/.nojekyll
-        ls -la public/ | grep .nojekyll
-    
-    # 复制根目录的.nojekyll文件到public目录
-    - name: Copy root .nojekyll to public
-      run: |
-        if [ -f .nojekyll ]; then
-          cp .nojekyll public/
-          echo "Copied root .nojekyll to public directory"
-        fi
+    - name: Create .nojekyll file
+      run: touch public/.nojekyll
     
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
@@ -61,7 +43,3 @@ jobs:
         publish_branch: gh-pages
         force_orphan: true
         keep_files: false
-        # 确保.nojekyll文件被保留
-        allow_empty_commit: true
-    
-    # 部署已完成，使用peaceiris/actions-gh-pages@v3直接推送到gh-pages分支
