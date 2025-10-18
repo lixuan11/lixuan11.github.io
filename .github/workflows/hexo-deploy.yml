@@ -40,7 +40,10 @@ jobs:
     
     # 确保.nojekyll文件存在于构建输出目录
     - name: Create .nojekyll file in public directory
-      run: touch public/.nojekyll
+      run: |
+        echo "Creating .nojekyll file"
+        touch public/.nojekyll
+        ls -la public/ | grep .nojekyll
     
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
