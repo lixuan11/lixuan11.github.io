@@ -31,13 +31,10 @@ tag_generator:
   order_by: -date
 
 # 网站图标
-site_favicon: img/favicon.ico
-
-# 网站Logo
 favicon:
-  icon: /img/favicon.ico
-  icon_192: /img/favicon.ico
-  apple_touch_icon: /img/favicon.ico
+  icon: img/favicon.ico
+  icon_192: img/favicon.ico
+  apple_touch_icon: img/favicon.ico
 
 # 网站背景
 # background_image:
@@ -54,7 +51,7 @@ highlight:
 
 # 社交链接
 social:
-  Github: https://github.com/lixuan11
+  github: https://github.com/lixuan11
   # 可以添加更多社交链接
 
 # 作者卡片按钮
